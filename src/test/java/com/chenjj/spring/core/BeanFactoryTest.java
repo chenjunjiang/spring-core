@@ -7,7 +7,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
 
-import com.chenjj.spring.model.Car;
+import com.chenjj.spring.core.model.Car;
 
 public class BeanFactoryTest {
 

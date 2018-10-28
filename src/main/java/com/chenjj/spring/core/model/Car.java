@@ -1,4 +1,4 @@
-package com.chenjj.spring.model;
+package com.chenjj.spring.core.model;
 
 import java.io.Serializable;
 
