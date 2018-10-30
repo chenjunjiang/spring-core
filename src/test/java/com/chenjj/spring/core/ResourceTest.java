@@ -6,6 +6,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
@@ -43,5 +44,15 @@ public class ResourceTest {
             URL url1 = enumeration.nextElement();
             System.out.println(url1.toString());
         }
+    }
+
+
+    @Test
+    public void testResource() throws IOException {
+        ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
+        // getResource不支持*匹配文件,只支持全匹配
+        Resource resource = resolver.getResource("classpath:beans.xml");
+        File file = resource.getFile();
+        System.out.println(file.getAbsolutePath());
     }
 }
