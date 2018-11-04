@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-	<bean id="car1" class="com.chenjj.spring.core.model.Car" p:brand="宝马X6"
-		  p:color="红色" p:maxSpeed="200" />
+    <bean id="car1" class="com.chenjj.spring.core.model.Car" p:brand="宝马X6"
+          p:color="红色" p:maxSpeed="200"/>
+
+    <bean id="dog" class="com.chenjj.spring.core.model.Dog" init-method="myInit" destroy-method="myDestroy"
+          p:name="布丁" p:weight="20"/>
+
+    <!-- 注册bean后处理器 -->
+    <bean id="myBeanPostProcessor" class="com.chenjj.spring.core.beanprocessor.MyBeanPostProcessor"/>
+    <!-- 注册工厂后处理器 -->
+    <bean id="myBeanFactoryPostProcessor" class="com.chenjj.spring.core.beanprocessor.MyBeanFactoryPostProcessor"/>
 </beans>

@@ -2,15 +2,22 @@ package com.chenjj.spring.core;
 
 import com.chenjj.spring.core.configuration.Beans;
 import com.chenjj.spring.core.model.Car;
+import com.chenjj.spring.core.model.Dog;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 
 /**
  * ApplicationContext是由BeanFactory派生而来，提供了更多面向实际应用的功能。
  * ApplicationContext初始化应用上下文时就实例化了所有的单实例Bean。
+ * ApplicationContext在启动时，就首先为配置文件中的每个<bean/>生成一个BeanDefinition对象，BeanDefinition是<bean/>
+ * 在容器中的内部表示。当配置文件中所有<bean/>都被解析成BeanDefinition时，ApplicationContext将调用工厂后处理器
+ * (BeanFactoryPostProcessor)的方法。
+ * 在配置文件中定义的BeanPostProcessor和BeanFactoryPostProcessor会自动被ApplicationContext识别并注册到容器中。
+ *
  * Created by chenjunjiang on 18-10-29.
  */
 public class ApplicationContextTest {
@@ -61,5 +68,14 @@ public class ApplicationContextTest {
         ApplicationContext context = new AnnotationConfigApplicationContext(Beans.class);
         Car car = context.getBean("car", Car.class);
         System.out.println(car);
+    }
+
+    @Test
+    public void testLifeCycle() {
+        AbstractApplicationContext context = new ClassPathXmlApplicationContext("classpath:beans.xml");
+        Dog dog = context.getBean("dog", Dog.class);
+        dog.introduce();
+        // Close this application context, destroying all beans in its bean factory
+        context.close();
     }
 }
