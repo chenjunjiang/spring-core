@@ -13,4 +13,6 @@
     <bean id="myBeanPostProcessor" class="com.chenjj.spring.core.beanprocessor.MyBeanPostProcessor"/>
     <!-- 注册工厂后处理器 -->
     <bean id="myBeanFactoryPostProcessor" class="com.chenjj.spring.core.beanprocessor.MyBeanFactoryPostProcessor"/>
+
+    <bean id="myTemplate" class="com.chenjj.spring.core.service.MyTemplate"/>
 </beans>
