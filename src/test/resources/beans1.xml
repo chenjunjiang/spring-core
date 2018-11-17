@@ -27,4 +27,9 @@
     <bean id="boss1" class="com.chenjj.spring.core.model.Boss1">
         <replaced-method name="getCar" replacer="boss2"/>
     </bean>
+
+    <bean id="car" class="com.chenjj.spring.core.model.Car" p:brand="阿仕顿马丁"
+          p:color="黄色" p:maxSpeed="300" scope="myScope"/>
+
+    <bean id="car2" class="com.chenjj.spring.core.factorybean.CarFactoryBean" p:carInfo="红旗,200,黑色"/>
 </beans>

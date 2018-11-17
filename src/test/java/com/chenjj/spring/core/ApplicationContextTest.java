@@ -1,11 +1,13 @@
 package com.chenjj.spring.core;
 
 import com.chenjj.spring.core.configuration.Beans;
+import com.chenjj.spring.core.factorybean.CarFactoryBean;
 import com.chenjj.spring.core.model.Boss;
 import com.chenjj.spring.core.model.Boss1;
 import com.chenjj.spring.core.model.Car;
 import com.chenjj.spring.core.model.Dog;
 import com.chenjj.spring.core.model.MagicBoss;
+import com.chenjj.spring.core.scope.MyScope;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -103,5 +105,27 @@ public class ApplicationContextTest {
         ApplicationContext context = new ClassPathXmlApplicationContext("classpath:beans1.xml");
         Boss1 boss1 = context.getBean("boss1", Boss1.class);
         System.out.println(boss1.getCar());
+    }
+
+    @Test
+    public void testCustomScope() {
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("classpath:beans1.xml");
+        context.getBeanFactory().registerScope("myScope", new MyScope());
+        Car car = context.getBean("car", Car.class);
+        Car car1 = context.getBean("car", Car.class);
+        System.out.println(car.toString());
+        System.out.println(car1.toString());
+        System.out.println(car == car1);
+    }
+
+    @Test
+    public void testFactoryBean() {
+        // Spring通过反射机制发现CarFactoryBean实现了FactoryBean接口，当调用getBean时，spring容器就调用接口方法CarFactoryBean
+        // &getObject返回工厂类创建的对象。如果希望获取CarFactoryBean的实例，则需要加上&前缀
+        ApplicationContext context = new ClassPathXmlApplicationContext("classpath:beans1.xml");
+        Car car = context.getBean("car2", Car.class);
+        CarFactoryBean carFactoryBean = context.getBean("&car2", CarFactoryBean.class);
+        System.out.println(car);
+        System.out.println(carFactoryBean);
     }
 }
