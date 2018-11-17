@@ -1,8 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-	<bean id="car2" class="com.chenjj.spring.core.model.Car" p:brand="奔驰"
-		  p:color="黑色" p:maxSpeed="100" />
+    <bean id="car1" class="com.chenjj.spring.core.model.Car" p:brand="奔驰"
+          p:color="白色" p:maxSpeed="200" scope="prototype"/>
+
+    <bean id="car3" class="com.chenjj.spring.core.model.Car" p:brand="吉普"
+          p:color="白色" p:maxSpeed="200"/>
+
+    <!-- 虽然car1的作用范围是prototype，但是通过这种方式每次调用getCar获取的car还是同一个 -->
+    <bean id="boss" class="com.chenjj.spring.core.model.Boss">
+        <property name="car" ref="car1"/>
+    </bean>
+
+    <!-- 这种方式每次调用getCar获取的car都是不相同的，这是通过实现ApplicationContextAware接口实现的 -->
+    <!--<bean id="magicBoss" class="com.chenjj.spring.core.model.MagicBossImpl"/>-->
+
+    <!-- 这种方式每次调用getCar获取的car都是不相同的，这是通过CGLib动态创建MagicBoss的实现类实现的 -->
+    <bean id="magicBoss" class="com.chenjj.spring.core.model.MagicBoss">
+        <lookup-method name="getCar" bean="car1"/>
+    </bean>
+
+    <!-- 使用boss2的reimplement方法替换boss1的getCar方法 -->
+    <bean id="boss2" class="com.chenjj.spring.core.model.Boss2"/>
+    <bean id="boss1" class="com.chenjj.spring.core.model.Boss1">
+        <replaced-method name="getCar" replacer="boss2"/>
+    </bean>
 </beans>

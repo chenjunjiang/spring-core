@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="car1" class="com.chenjj.spring.core.model.Car" p:brand="路虎"
+          p:color="红色" p:maxSpeed="110"/>
+
+    <bean id="boss" class="com.chenjj.spring.core.model.Boss">
+        <property name="car">
+            <!-- 访问父容器的bean -->
+            <ref parent="car1"/>
+            <!--<ref bean="car1"/>-->
+        </property>
+    </bean>
+</beans>

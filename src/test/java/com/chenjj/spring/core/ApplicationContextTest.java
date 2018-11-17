@@ -1,8 +1,11 @@
 package com.chenjj.spring.core;
 
 import com.chenjj.spring.core.configuration.Beans;
+import com.chenjj.spring.core.model.Boss;
+import com.chenjj.spring.core.model.Boss1;
 import com.chenjj.spring.core.model.Car;
 import com.chenjj.spring.core.model.Dog;
+import com.chenjj.spring.core.model.MagicBoss;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -17,7 +20,7 @@ import org.springframework.context.support.FileSystemXmlApplicationContext;
  * 在容器中的内部表示。当配置文件中所有<bean/>都被解析成BeanDefinition时，ApplicationContext将调用工厂后处理器
  * (BeanFactoryPostProcessor)的方法。
  * 在配置文件中定义的BeanPostProcessor和BeanFactoryPostProcessor会自动被ApplicationContext识别并注册到容器中。
- *
+ * <p>
  * Created by chenjunjiang on 18-10-29.
  */
 public class ApplicationContextTest {
@@ -35,11 +38,13 @@ public class ApplicationContextTest {
 
         // ApplicationContext context = new ClassPathXmlApplicationContext("classpath:beans.xml");
 
-        // 这种方式在idea环境下会加载src/test/resources和src/main/resources下的资源
-        ApplicationContext context = new ClassPathXmlApplicationContext("classpath*:*.xml");
-        // 这种方式在idea环境下只会加载src/test/resources下的资源，而不会加载src/main/resources下的资源
-        // ApplicationContext context = new ClassPathXmlApplicationContext("classpath:*.xml");
-        // ApplicationContext context = new ClassPathXmlApplicationContext("beans.xml");
+        // 代码写在src/test/java下的时候，这种方式在idea环境下会同时加载src/test/resources和src/main/resources下的资源
+        ApplicationContext context = new ClassPathXmlApplicationContext("classpath*:beans1.xml");
+
+        // 代码写在src/test/java下的时候，以下两种方式在idea环境下会优先加载src/test/resources下的资源，
+        // 如果找不到指定文件，再加载src/main/resources下的文件
+        // ApplicationContext context = new ClassPathXmlApplicationContext("classpath:beans1.xml");
+        // ApplicationContext context = new ClassPathXmlApplicationContext("beans1.xml");
         // Car car = context.getBean(Car.class);
         Car car1 = context.getBean("car1", Car.class);
         // System.out.println(car);
@@ -77,5 +82,26 @@ public class ApplicationContextTest {
         dog.introduce();
         // Close this application context, destroying all beans in its bean factory
         context.close();
+    }
+
+    @Test
+    public void testLookupMethod() {
+        ApplicationContext context = new ClassPathXmlApplicationContext("classpath:beans1.xml");
+        Boss boss = context.getBean("boss", Boss.class);
+        Car car1 = boss.getCar();
+        Car car2 = boss.getCar();
+        System.out.println(car1 == car2);// true
+
+        MagicBoss magicBoss = context.getBean("magicBoss", MagicBoss.class);
+        Car car3 = magicBoss.getCar();
+        Car car4 = magicBoss.getCar();
+        System.out.println(car3 == car4);// false
+    }
+
+    @Test
+    public void testReplaceMethod() {
+        ApplicationContext context = new ClassPathXmlApplicationContext("classpath:beans1.xml");
+        Boss1 boss1 = context.getBean("boss1", Boss1.class);
+        System.out.println(boss1.getCar());
     }
 }
