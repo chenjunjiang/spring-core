@@ -1,8 +1,10 @@
 package com.chenjj.spring.core;
 
+import com.chenjj.spring.core.beanprocessor.AutoAddBeanViaCoding;
 import com.chenjj.spring.core.beanprocessor.MyBeanPostProcessor;
 import com.chenjj.spring.core.beanprocessor.MyInstantiationAwareBeanPostProcessor;
 import com.chenjj.spring.core.model.Dog;
+import com.chenjj.spring.core.service.UserService;
 import org.junit.Test;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -63,5 +65,20 @@ public class BeanFactoryTest {
 
         // 关闭容器
         ((DefaultListableBeanFactory) beanFactory).destroySingletons();
+    }
+
+    /**
+     * 通过BeanFactory初始化的方式不能让自定义的BeanFactoryPostProcessor生效，下面的测试会报错
+     * 要使用ApplicationContext的方式
+     */
+    @Test
+    public void testAutoAddBeanViaCoding() {
+        ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
+        Resource resource = resolver.getResource("classpath:beans1.xml");
+        BeanFactory beanFactory = new DefaultListableBeanFactory();
+        XmlBeanDefinitionReader reader = new XmlBeanDefinitionReader((BeanDefinitionRegistry) beanFactory);
+        reader.loadBeanDefinitions(resource);
+        UserService userService1 = beanFactory.getBean("userService1", UserService.class);
+        System.out.println(userService1.getUser());
     }
 }

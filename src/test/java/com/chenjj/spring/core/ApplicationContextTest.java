@@ -8,6 +8,7 @@ import com.chenjj.spring.core.model.Car;
 import com.chenjj.spring.core.model.Dog;
 import com.chenjj.spring.core.model.MagicBoss;
 import com.chenjj.spring.core.scope.MyScope;
+import com.chenjj.spring.core.service.UserService;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -127,5 +128,14 @@ public class ApplicationContextTest {
         CarFactoryBean carFactoryBean = context.getBean("&car2", CarFactoryBean.class);
         System.out.println(car);
         System.out.println(carFactoryBean);
+    }
+
+    @Test
+    public void testAutoAddBeanViaCoding() {
+        ApplicationContext context = new ClassPathXmlApplicationContext("classpath:beans1.xml");
+        UserService userService1 = context.getBean("userService1", UserService.class);
+        UserService userService2 = context.getBean("userService2", UserService.class);
+        System.out.println(userService1.getUser());
+        System.out.println(userService2.getUser());
     }
 }

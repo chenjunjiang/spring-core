@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd">
 
+    <context:component-scan base-package="com.chenjj.spring.core.service,com.chenjj.spring.core.dao"/>
     <bean id="car1" class="com.chenjj.spring.core.model.Car" p:brand="奔驰"
           p:color="白色" p:maxSpeed="200" scope="prototype"/>
 
@@ -32,4 +38,7 @@
           p:color="黄色" p:maxSpeed="300" scope="myScope"/>
 
     <bean id="car2" class="com.chenjj.spring.core.factorybean.CarFactoryBean" p:carInfo="红旗,200,黑色"/>
+
+    <!-- 注册工厂后处理器 -->
+    <bean id="autoAddBeanViaCoding" class="com.chenjj.spring.core.beanprocessor.AutoAddBeanViaCoding"/>
 </beans>
