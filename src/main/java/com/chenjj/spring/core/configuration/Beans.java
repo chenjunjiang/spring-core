@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class Beans {
 
-    @Bean(name = "car")
+    @Bean(name = "car", initMethod = "init", destroyMethod = "destroy")
     public Car car() {
         Car car = new Car();
         car.setBrand("捷豹");
@@ -19,4 +19,5 @@ public class Beans {
 
         return car;
     }
+
 }

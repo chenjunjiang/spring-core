@@ -73,9 +73,10 @@ public class ApplicationContextTest {
 
     @Test
     public void test3() {
-        ApplicationContext context = new AnnotationConfigApplicationContext(Beans.class);
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(Beans.class);
         Car car = context.getBean("car", Car.class);
         System.out.println(car);
+        context.close();
     }
 
     @Test
@@ -137,5 +138,26 @@ public class ApplicationContextTest {
         UserService userService2 = context.getBean("userService2", UserService.class);
         System.out.println(userService1.getUser());
         System.out.println(userService2.getUser());
+    }
+
+    @Test
+    public void testCustomLabel() {
+        ApplicationContext context = new ClassPathXmlApplicationContext("classpath:beans1.xml");
+        UserService userService3 = context.getBean("userService3", UserService.class);
+        System.out.println(userService3.getUser());
+    }
+
+    @Test
+    public void testCustomPropertyEditor() {
+        ApplicationContext context = new ClassPathXmlApplicationContext("classpath:beans1.xml");
+        Boss boss = context.getBean("boss4", Boss.class);
+        System.out.println(boss.getCar());
+    }
+
+    @Test
+    public void testCustomPropertyEditor2() {
+        ApplicationContext context = new ClassPathXmlApplicationContext("classpath:beans1.xml");
+        Boss boss = context.getBean("boss5", Boss.class);
+        System.out.println(boss.getCar());
     }
 }

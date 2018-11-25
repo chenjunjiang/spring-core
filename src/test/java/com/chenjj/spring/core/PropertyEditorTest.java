@@ -21,7 +21,7 @@ public class PropertyEditorTest {
      * myTemplate和UserOperations没有任何关系，不是同一种类型，也没有继承关系，那是怎么注册成功的呢？
      *
      * @Resource 的机制不仅仅是通过类型和名称注册，还可以通过属性编辑器来注册，具体查看{@link UserOperationsEditor}
-     * 示例。其实，上面的HashOperations的注入就是通过这种方式把redisTemplate注入进去的
+     * 示例。其实，spring-jedis的HashOperations的注入就是通过这种方式把redisTemplate注入进去的
      */
     @Resource(name = "myTemplate")
     private UserOperations userOperations;

@@ -3,10 +3,13 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:p="http://www.springframework.org/schema/p"
        xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:us="http://www.chenjj.com/schema/service"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans.xsd
        http://www.springframework.org/schema/context
-       http://www.springframework.org/schema/context/spring-context.xsd">
+       http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.chenjj.com/schema/service
+       http://www.chenjj.com/schema/service.xsd">
 
     <context:component-scan base-package="com.chenjj.spring.core.service,com.chenjj.spring.core.dao"/>
     <bean id="car1" class="com.chenjj.spring.core.model.Car" p:brand="奔驰"
@@ -41,4 +44,31 @@
 
     <!-- 注册工厂后处理器 -->
     <bean id="autoAddBeanViaCoding" class="com.chenjj.spring.core.beanprocessor.AutoAddBeanViaCoding"/>
+
+    <us:user-service dao="userDao"/>
+
+    <!--在BeanFactory中直接调用registerCustomEditor方法就可以注册自定义的属性编辑器了-->
+    <!--<bean id="boss3" class="com.chenjj.spring.core.model.Boss">
+        <property name="car" value="悍马101,300,黑色"/>
+    </bean>-->
+
+    <!--如果是ApplicationContext，则需要使用CustomEditorConfigurer注册自定义属性编辑器-->
+    <!--<bean class="org.springframework.beans.factory.config.CustomEditorConfigurer">
+        <property name="customEditors">
+            <map>
+                <entry key="com.chenjj.spring.core.model.Car"
+                       value="com.chenjj.spring.core.propertyeditor.CustomCarEditor">
+                </entry>
+            </map>
+        </property>
+    </bean>-->
+    <!--BeanWrapper在设置Boss的car属性时，将检查自定义属性编辑器的注册表，当发现Car属性类型拥有对应的属性编辑器时，就利用
+    它将"悍马101,300,黑色"转换成car对象-->
+    <!--<bean id="boss4" class="com.chenjj.spring.core.model.Boss">
+        <property name="car" value="悍马101,300,黑色"/>
+    </bean>-->
+
+    <bean id="boss5" class="com.chenjj.spring.core.model.Boss">
+        <property name="car" value="悍马101,300,黑色"/>
+    </bean>
 </beans>

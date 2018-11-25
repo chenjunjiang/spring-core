@@ -50,4 +50,11 @@ public class Car implements Serializable {
         return builder.toString();
     }
 
+    private void init() {
+        System.out.println("@Bean init......");
+    }
+
+    private void destroy() {
+        System.out.println("@Bean destroy......");
+    }
 }

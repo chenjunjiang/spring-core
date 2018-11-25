@@ -14,7 +14,7 @@ import java.util.Enumeration;
 
 /**
  * 资源加载
- * 更对关于资源加载的只是请参考有道云笔记里面的spring resource小节
+ * 更对关于资源加载的知识请参考有道云笔记里面的spring resource小节
  * Created by chenjunjiang on 18-10-28.
  */
 public class ResourceTest {

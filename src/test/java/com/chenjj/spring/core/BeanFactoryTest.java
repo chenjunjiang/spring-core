@@ -3,7 +3,9 @@ package com.chenjj.spring.core;
 import com.chenjj.spring.core.beanprocessor.AutoAddBeanViaCoding;
 import com.chenjj.spring.core.beanprocessor.MyBeanPostProcessor;
 import com.chenjj.spring.core.beanprocessor.MyInstantiationAwareBeanPostProcessor;
+import com.chenjj.spring.core.model.Boss;
 import com.chenjj.spring.core.model.Dog;
+import com.chenjj.spring.core.propertyeditor.CustomCarEditor;
 import com.chenjj.spring.core.service.UserService;
 import org.junit.Test;
 import org.springframework.beans.factory.BeanFactory;
@@ -80,5 +82,17 @@ public class BeanFactoryTest {
         reader.loadBeanDefinitions(resource);
         UserService userService1 = beanFactory.getBean("userService1", UserService.class);
         System.out.println(userService1.getUser());
+    }
+
+    @Test
+    public void testCustomPropertyEditor() {
+        ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
+        Resource resource = resolver.getResource("classpath:beans1.xml");
+        BeanFactory beanFactory = new DefaultListableBeanFactory();
+        ((DefaultListableBeanFactory) beanFactory).registerCustomEditor(Car.class, CustomCarEditor.class);
+        XmlBeanDefinitionReader reader = new XmlBeanDefinitionReader((BeanDefinitionRegistry) beanFactory);
+        reader.loadBeanDefinitions(resource);
+        Boss boss = beanFactory.getBean("boss3", Boss.class);
+        System.out.println(boss.getCar());
     }
 }
