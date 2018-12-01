@@ -8,7 +8,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 /**
  * Created by chenjunjiang on 18-11-10.
  */
-public class ApplicationContextTest {
+public class ApplicationContextTest1 {
     public static void main(String[] args) {
         // 代码写在src/main/java下的时候，如果是通过ClassPathXmlApplicationContext来加载文件，
         // 不管configLocation是classpath:beans1.xml或者classpath*:beans1.xml，还是beans1.xml，

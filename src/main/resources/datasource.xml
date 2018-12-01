@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!--<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"
+          p:location="classpath:jdbc.properties"
+          p:fileEncoding="utf-8"/>-->
+
+    <!-- 可以使用context命名空间定义属性文件，相比传统的PropertyPlaceholderConfigurer配置，这种方法更优雅。
+     虽然这种方式比较优雅，但如果希望自定义一些额外的高级功能，则必须使用扩展PropertyPlaceholderConfigurer的类-->
+   <!-- <context:property-placeholder location="classpath:jdbc.properties"/>-->
+
+    <context:component-scan base-package="com.chenjj.spring.core.placeholder"/>
+
+    <bean class="com.chenjj.spring.core.placeholder.MyPropertyPlaceholderConfigurer"
+          p:location="classpath:jdbc.properties"
+          p:fileEncoding="utf-8"/>
+
+    <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close"
+          p:driverClassName="${driverClassName}"
+          p:url="${url}"
+          p:username="${userName}"
+          p:password="${password}"/>
+</beans>

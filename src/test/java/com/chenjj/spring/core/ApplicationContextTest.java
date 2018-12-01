@@ -1,20 +1,26 @@
 package com.chenjj.spring.core;
 
 import com.chenjj.spring.core.configuration.Beans;
+import com.chenjj.spring.core.event.MailSender;
 import com.chenjj.spring.core.factorybean.CarFactoryBean;
 import com.chenjj.spring.core.model.Boss;
 import com.chenjj.spring.core.model.Boss1;
 import com.chenjj.spring.core.model.Car;
 import com.chenjj.spring.core.model.Dog;
 import com.chenjj.spring.core.model.MagicBoss;
+import com.chenjj.spring.core.placeholder.MyDataSource;
+import com.chenjj.spring.core.placeholder.SysConfig;
 import com.chenjj.spring.core.scope.MyScope;
 import com.chenjj.spring.core.service.UserService;
+import org.apache.commons.dbcp2.BasicDataSource;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
+
+import javax.sql.DataSource;
 
 /**
  * ApplicationContext是由BeanFactory派生而来，提供了更多面向实际应用的功能。
@@ -159,5 +165,37 @@ public class ApplicationContextTest {
         ApplicationContext context = new ClassPathXmlApplicationContext("classpath:beans1.xml");
         Boss boss = context.getBean("boss5", Boss.class);
         System.out.println(boss.getCar());
+    }
+
+    @Test
+    public void testPropertyPlaceholderConfigurer() {
+        ApplicationContext context = new ClassPathXmlApplicationContext("classpath:datasource.xml");
+        DataSource dataSource = context.getBean("dataSource", BasicDataSource.class);
+        SysConfig sysConfig = context.getBean(SysConfig.class);
+        MyDataSource myDataSource = context.getBean(MyDataSource.class);
+        System.out.println(dataSource);
+        System.out.println(myDataSource);
+        System.out.println(sysConfig);
+    }
+
+    /**
+     * Spring在ApplicationContext接口的抽象实现类AbstractApplicationContext中完成了事件体系的搭建。AbstractApplicationContext拥有
+     * 一个applicationEventMulticaster成员变量，applicationEventMulticaster提供了容器监听器的注册表。AbstractApplicationContext
+     * 在refresh()这个容器启动方法中通过以下3个步骤搭建了事件的基础设施：
+     * 初始化事件的广播器，用户可以在配置文件中为容器定义一个自定义的事件广播器，只要实现ApplicationEventMulticaster即可，spring会通过
+     * 反射机制将其注册为容器的广播器。如果没有找到配置的外部事件广播器，则spring自动使用SimpleApplicationEventMulticaster作为事件广播器
+     * initApplicationEventMulticaster();
+     * spring根据反射机制，从BeanDefinitionRegistry中找出实现ApplicationListener的Bean，将它们注册为容器的事件监听器，实际操作就是将
+     * 其添加到事件广播器所提供的事件监听器注册表中。
+     * registerListeners();
+     * 容器启动完成，调用事件发布接口向容器中所有的监听器发布事件。在publishEvent()内部可以看到，spring委托applicationEventMulticaster
+     * 将事件通知给事件监听器
+     * finishRefresh();
+     */
+    @Test
+    public void testEvent() {
+        ApplicationContext context = new ClassPathXmlApplicationContext("classpath:event.xml");
+        MailSender mailSender = context.getBean("mainSender", MailSender.class);
+        mailSender.sendMail("chenjj@yeah.net");
     }
 }
