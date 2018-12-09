@@ -17,6 +17,15 @@ public class CglibProxy implements MethodInterceptor {
         return enhancer.create();
     }
 
+    /**
+     * 拦截父类所有方法的调用
+     * @param object
+     * @param method
+     * @param args
+     * @param methodProxy
+     * @return
+     * @throws Throwable
+     */
     @Override
     public Object intercept(Object object, Method method, Object[] args, MethodProxy methodProxy) throws Throwable {
         PerformanceMonitor.begin(object.getClass().getName() + "." + method.getName());

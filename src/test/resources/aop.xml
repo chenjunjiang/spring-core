@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="greetingBeforeAdvice" class="com.chenjj.spring.core.aop.GreetingBeforeAdvice"/>
+    <bean id="greetingAfterAdvice" class="com.chenjj.spring.core.aop.GreetingAfterAdvice"/>
+    <bean id="greetingInterceptor" class="com.chenjj.spring.core.aop.GreetingInterceptor"/>
+    <bean id="target" class="com.chenjj.spring.core.aop.NavieWaiter"/>
+    <bean id="exceptionManager" class="com.chenjj.spring.core.aop.ExceptionManager"/>
+    <bean id="exceptionServiceTarget" class="com.chenjj.spring.core.aop.ExceptionService"/>
+    <bean id="controllablePerformanceMonitor" class="com.chenjj.spring.core.aop.ControllablePerformanceMonitor"/>
+    <bean id="forumServiceTarget" class="com.chenjj.spring.core.proxy.ForumServiceImpl"/>
+    <!-- p:proxyTargetClass="true",是否对类进行代理（而不是对接口进行代理）。当设置为true时，使用CGLib动态代理 -->
+    <!--<bean id="waiter" class="org.springframework.aop.framework.ProxyFactoryBean"
+          p:proxyInterfaces="com.chenjj.spring.core.aop.Waiter"
+          p:interceptorNames="greetingBeforeAdvice,greetingAfterAdvice"
+          p:target-ref="target"
+    />-->
+    <!--<bean id="waiter" class="org.springframework.aop.framework.ProxyFactoryBean"
+          p:proxyInterfaces="com.chenjj.spring.core.aop.Waiter"
+          p:interceptorNames="greetingInterceptor"
+          p:target-ref="target"
+    />-->
+    <!-- 因为ExceptionService是类,所以使用CGLib代理 -->
+    <!--<bean id="exceptionService" class="org.springframework.aop.framework.ProxyFactoryBean"
+          p:interceptorNames="exceptionManager"
+          p:target-ref="exceptionServiceTarget"
+          p:proxyTargetClass="true"
+    />-->
+
+    <!-- 引介增强可以为目标类添加一个接口的实现，即原来目标类未实现某个接口，通过引介增强可以为目标类创建实现某接口的代理，下面就是
+    为forumServiceTarget动态实现了Monitorable接口，最后生成的forumServiceTarget的代理对象就是实现了Monitorable接口的-->
+    <!-- 由于引介增强一定要通过创建子类来生成代理，所以需要强制使用CGLib代理 -->
+    <bean id="forumService" class="org.springframework.aop.framework.ProxyFactoryBean"
+          p:interfaces="com.chenjj.spring.core.aop.Monitorable"
+          p:target-ref="forumServiceTarget"
+          p:interceptorNames="controllablePerformanceMonitor"
+          p:proxyTargetClass="true"
+    />
+
+    <!-- 对于属性是字符串数组类型且数组元素是Bean名称的配置，我们最好使用idref标签，这样IDEA会及时发现配置错误并给出警告 -->
+    <!--<bean id="waiter" class="org.springframework.aop.framework.ProxyFactoryBean">
+        <property name="proxyInterfaces">
+            <list>
+                <value>com.chenjj.spring.core.aop.Waiter</value>
+            </list>
+        </property>
+        <property name="interceptorNames">
+            <list>
+                <idref bean="greetingBeforeAdvice"/>
+                <idref bean="greetingAfterAdvice"/>
+            </list>
+        </property>
+        <property name="target" ref="target"/>
+    </bean>-->
+</beans>
