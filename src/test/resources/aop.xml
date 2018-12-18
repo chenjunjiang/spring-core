@@ -34,6 +34,7 @@
     <!-- 引介增强可以为目标类添加一个接口的实现，即原来目标类未实现某个接口，通过引介增强可以为目标类创建实现某接口的代理，下面就是
     为forumServiceTarget动态实现了Monitorable接口，最后生成的forumServiceTarget的代理对象就是实现了Monitorable接口的-->
     <!-- 由于引介增强一定要通过创建子类来生成代理，所以需要强制使用CGLib代理 -->
+    <!-- p:interfaces 指定引介增强实现的接口 -->
     <bean id="forumService" class="org.springframework.aop.framework.ProxyFactoryBean"
           p:interfaces="com.chenjj.spring.core.aop.Monitorable"
           p:target-ref="forumServiceTarget"

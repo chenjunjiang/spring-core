@@ -13,7 +13,7 @@ public class ControllablePerformanceMonitor extends DelegatingIntroductionInterc
     }
 
     public Object invoke(MethodInvocation methodInvocation) throws Throwable {
-        Object object = null;
+        Object object;
         if (monitorStatusMap.get() != null && monitorStatusMap.get()) {
             PerformanceMonitor.begin(methodInvocation.getClass().getName() + "." + methodInvocation
                     .getMethod().getName());

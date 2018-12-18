@@ -1,6 +1,8 @@
 package com.chenjj.spring.core;
 
 import com.chenjj.spring.core.aop.*;
+import com.chenjj.spring.core.aop.advisor.Caddier;
+import com.chenjj.spring.core.aop.advisor.Seller;
 import com.chenjj.spring.core.proxy.ForumService;
 import org.junit.Test;
 import org.springframework.aop.BeforeAdvice;
@@ -87,5 +89,19 @@ public class AOPTest {
 
         forumService.removeForum(10);
         forumService.removeTopic(1022);
+    }
+
+    /**
+     * 测试静态普通方法名匹配切面
+     */
+    @Test
+    public void testStaticMethodMatcherPointcutAdvisor() {
+        ApplicationContext context = new ClassPathXmlApplicationContext("classpath:aop-advisor.xml");
+        Caddier caddier = context.getBean("caddier", Caddier.class);
+        Seller seller = context.getBean("seller", Seller.class);
+        caddier.greetTo("zhangsan");
+        caddier.serverTo("zhangsan");
+        seller.greetTo("lisi");
+
     }
 }

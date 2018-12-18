@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="caddierTarget" class="com.chenjj.spring.core.aop.advisor.Caddier"/>
+    <bean id="sellerTarget" class="com.chenjj.spring.core.aop.advisor.Seller"/>
+    <bean id="greetingBeforeAdvice" class="com.chenjj.spring.core.aop.GreetingBeforeAdvice"/>
+    <!-- advice-ref向切面注入一个前置增强,还有classFilter属性（我们定义在GreetingAdvisor里了）,order属性（切面织入时的顺序，
+    用于定义Ordered接口表示的顺序） -->
+    <bean id="greetingAdvisor" class="com.chenjj.spring.core.aop.advisor.GreetingAdvisor"
+          p:advice-ref="greetingBeforeAdvice"/>
+
+    <bean id="parent" abstract="true" class="org.springframework.aop.framework.ProxyFactoryBean"
+          p:interceptorNames="greetingAdvisor"
+          p:proxyTargetClass="true"/>
+    <bean id="caddier" parent="parent" p:target-ref="caddierTarget"/>
+    <bean id="seller" parent="parent" p:target-ref="sellerTarget"/>
+</beans>
