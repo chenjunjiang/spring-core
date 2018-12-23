@@ -6,9 +6,9 @@ import org.springframework.aop.support.StaticMethodMatcherPointcutAdvisor;
 import java.lang.reflect.Method;
 
 /**
- * 定义切面
+ * 定义静态切面
  */
-public class GreetingAdvisor extends StaticMethodMatcherPointcutAdvisor {
+public class GreetingStaticMethodAdvisor extends StaticMethodMatcherPointcutAdvisor {
     /**
      * 切点方法匹配规则
      * 方法名为greetTo

@@ -3,6 +3,7 @@ package com.chenjj.spring.core;
 import com.chenjj.spring.core.aop.*;
 import com.chenjj.spring.core.aop.advisor.Caddier;
 import com.chenjj.spring.core.aop.advisor.Seller;
+import com.chenjj.spring.core.aop.advisor.WaiterDelegate;
 import com.chenjj.spring.core.proxy.ForumService;
 import org.junit.Test;
 import org.springframework.aop.BeforeAdvice;
@@ -92,7 +93,28 @@ public class AOPTest {
     }
 
     /**
-     * 测试静态普通方法名匹配切面
+     * 测试引介切面
+     */
+    @Test
+    public void testIntroduceAdvisor() {
+        ApplicationContext context = new ClassPathXmlApplicationContext("classpath:aop-advisor.xml");
+        ForumService forumService = (ForumService) context.getBean("forumService");
+        // 默认情况下没有开启性能监控
+        forumService.removeForum(10);
+        forumService.removeTopic(1022);
+
+        System.out.println("*********************");
+
+        // 开启性能监控
+        Monitorable monitorable = (Monitorable) forumService;
+        monitorable.setMonitorActive(true);
+
+        forumService.removeForum(10);
+        forumService.removeTopic(1022);
+    }
+
+    /**
+     * 测试静态切面
      */
     @Test
     public void testStaticMethodMatcherPointcutAdvisor() {
@@ -103,5 +125,59 @@ public class AOPTest {
         caddier.serverTo("zhangsan");
         seller.greetTo("lisi");
 
+    }
+
+    /**
+     * 测试正则表达式切面
+     */
+    @Test
+    public void testRegexpMethodPointcutAdvisor() {
+        ApplicationContext context = new ClassPathXmlApplicationContext("classpath:aop-advisor.xml");
+        Caddier caddier = context.getBean("caddier", Caddier.class);
+        Seller seller = context.getBean("seller", Seller.class);
+        caddier.greetTo("zhangsan");
+        caddier.serverTo("zhangsan");
+        seller.greetTo("lisi");
+    }
+
+    /**
+     * 测试动态切面
+     */
+    @Test
+    public void testDynamicMethodMatcherPointcutAdvisor() {
+        ApplicationContext context = new ClassPathXmlApplicationContext("classpath:aop-advisor.xml");
+        Caddier caddier = context.getBean("caddier", Caddier.class);
+        Seller seller = context.getBean("seller", Seller.class);
+        caddier.greetTo("John");
+        caddier.serverTo("Tom");
+        seller.greetTo("lisi");
+    }
+
+    /**
+     * 测试流程切面
+     */
+    @Test
+    public void testControlFlowAdvisor() {
+        ApplicationContext context = new ClassPathXmlApplicationContext("classpath:aop-advisor.xml");
+        Waiter waiter = context.getBean("waiter", Waiter.class);
+        WaiterDelegate waiterDelegate = new WaiterDelegate();
+        waiterDelegate.setWaiter(waiter);
+        waiter.greetTo("zhangsan");
+        waiter.serveTo("zhangsan");
+        waiterDelegate.service("zhangsan");
+    }
+
+    /**
+     * 测试复合切面
+     */
+    @Test
+    public void testComposableAdvisor() {
+        ApplicationContext context = new ClassPathXmlApplicationContext("classpath:aop-advisor.xml");
+        Waiter waiter = context.getBean("waiter1", Waiter.class);
+        WaiterDelegate waiterDelegate = new WaiterDelegate();
+        waiterDelegate.setWaiter(waiter);
+        waiter.greetTo("zhangsan");
+        waiter.serveTo("zhangsan");
+        waiterDelegate.service("zhangsan");
     }
 }

@@ -12,6 +12,7 @@ public class ControllablePerformanceMonitor extends DelegatingIntroductionInterc
         monitorStatusMap.set(active);
     }
 
+    @Override
     public Object invoke(MethodInvocation methodInvocation) throws Throwable {
         Object object;
         if (monitorStatusMap.get() != null && monitorStatusMap.get()) {
@@ -20,6 +21,7 @@ public class ControllablePerformanceMonitor extends DelegatingIntroductionInterc
             object = super.invoke(methodInvocation);
             PerformanceMonitor.end();
         } else {
+            System.out.println("不进行监控...... " + methodInvocation.getMethod().getName());
             object = super.invoke(methodInvocation);
         }
 
